@@ -1,9 +1,12 @@
 package org.serratec.dto;
 
+import org.serratec.models.Cliente;
+
 public class TokenDTO {
 	
 	private String type;
 	private String token;
+	private Cliente cliente;
 	
 	public String getType() {
 		return type;
@@ -21,4 +24,11 @@ public class TokenDTO {
 		this.token = token;
 	}
 
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 }

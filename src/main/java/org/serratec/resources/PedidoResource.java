@@ -84,7 +84,7 @@ public class PedidoResource {
 		}
 	}
 
-	@ApiOperation(value = "Atualização de um pedido")
+	@ApiOperation(value = "Atualizaï¿½ï¿½o de um pedido")
 	@PutMapping("/pedido")
 	public ResponseEntity<?> atualizarPedido(@RequestBody PedidoAtualizarItemDTO dto) {
 
@@ -106,10 +106,10 @@ public class PedidoResource {
 					}
 				}
 			} else { 
-				return new ResponseEntity<>("Não é possível atualizar este pedido, pois já está FINALIZADO.", HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>("Nï¿½o ï¿½ possï¿½vel atualizar este pedido, pois jï¿½ estï¿½ FINALIZADO.", HttpStatus.NOT_FOUND);
 			}
 
-			return new ResponseEntity<>("Item não encontrado.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Item nï¿½o encontrado.", HttpStatus.NOT_FOUND);
 
 		} catch (PedidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -123,7 +123,7 @@ public class PedidoResource {
 		Optional<Pedido> optional = pedidoRepository.findByNumeroPedido(numeroPedido);
 
 		if (optional.isEmpty()) {
-			return new ResponseEntity<>("Pedido não encontrado.", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Pedido nï¿½o encontrado.", HttpStatus.NOT_FOUND);
 		}
 
 		Pedido existente = optional.get();
@@ -152,7 +152,7 @@ public class PedidoResource {
 			
 			String corpoEmail = String.format("Data estimada para entrega: %s\nProdutos adquiridos: \n%s\nTotal do pedido: %s", entrega, itens.toString(), totalPedido);
 			
-			emailService.enviar("Atualização do status do seu pedido", corpoEmail , pedido.getCliente().getEmail());
+			emailService.enviar("Atualizaï¿½ï¿½o do status do seu pedido", corpoEmail , pedido.getCliente().getEmail());
 			
 			return new ResponseEntity<>("Data estimada para entrega: " + entrega + "\nProdutos adquiridos: \n" + itens.toString() + "\nTotal do pedido: R$ " + totalPedido, HttpStatus.OK);
 		} catch (PedidoException e) {

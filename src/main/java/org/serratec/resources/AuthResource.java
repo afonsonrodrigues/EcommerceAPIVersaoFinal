@@ -2,6 +2,8 @@ package org.serratec.resources;
 
 import org.serratec.dto.LoginDTO;
 import org.serratec.dto.TokenDTO;
+import org.serratec.models.Cliente;
+import org.serratec.repository.ClienteRepository;
 import org.serratec.security.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,17 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.Optional;
+
 @RestController
-@Api(value = "API - Autenticação")
+@Api(value = "API - Autenticaï¿½ï¿½o")
 public class AuthResource {
-	
+
+	@Autowired
+	private ClienteRepository clienteRepository;
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private TokenService tokenService;
 	
-	@ApiOperation(value = "Geração do token de autenticação a partir de username e senha")
+	@ApiOperation(value = "Geraï¿½ï¿½o do token de autenticaï¿½ï¿½o a partir de username e senha")
 	@PostMapping("/auth")
 	public ResponseEntity<?> auth(@RequestBody @Validated LoginDTO loginDTO){
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUser(), loginDTO.getPass());
@@ -39,6 +46,10 @@ public class AuthResource {
 		TokenDTO tokenDTO = new TokenDTO();
 		tokenDTO.setToken(token);
 		tokenDTO.setType("Bearer");
+		Optional<Cliente> optional = clienteRepository.findByEmail(loginDTO.getUser());
+		if (optional.isPresent()) {
+			tokenDTO.setCliente(optional.get());
+		}
 		
 		return new ResponseEntity<>(tokenDTO, HttpStatus.OK);		
 	}
