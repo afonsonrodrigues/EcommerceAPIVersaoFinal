@@ -78,6 +78,19 @@ public class ProdutoResource {
 		}
 		
 	}
+	//acrescentei para ficar melhor a pesquisa
+	@ApiOperation(value = "Consulta de produto por id")
+	@GetMapping("/produto/id/{id}")
+	public ResponseEntity<?> getPorid(@PathVariable Long id) {
+		try {
+			Produto produto = produtoRepository.findById(id) .orElseThrow(() -> new ProdutoException("Produto não encontrado."));
+			return new ResponseEntity<>(produto, HttpStatus.OK);
+			
+		} catch (ProdutoException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		
+	}
 	
 	@ApiOperation(value = "Atualização de um produto pelo seu ID")
 	@PutMapping("/produto/{id}")
