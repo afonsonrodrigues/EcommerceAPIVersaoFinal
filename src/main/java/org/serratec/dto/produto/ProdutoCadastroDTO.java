@@ -52,15 +52,16 @@ public class ProdutoCadastroDTO {
 		p.setDescricao(this.descricao);
 		p.setPreco(this.preco);
 		p.setQuantidadeEstoque(this.quantidadeEstoque);
+		p.setImagemBase64(this.imgBase64);
 		
 		Categoria categoria = categoriaRepository.findById(this.categoria.getId()).orElseThrow(() -> new CategoriaException("Categoria não encontrada."));
 		p.setCategoria(categoria);
 		p.setDataCadastro(LocalDateTime.now());
 		
-		if(imgBase64 != null) {
+		/*if(imgBase64 != null) {
 			byte[] capa = Base64.decodeBase64(imgBase64);
 			p.setImagemBase64(capa);	
-		}
+		}*/
 		
 		return p;
 	}

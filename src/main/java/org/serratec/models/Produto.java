@@ -27,15 +27,18 @@ public class Produto {
 	
 	private LocalDateTime dataCadastro;
 	
-	private byte[] imagemBase64;
+	private String imagemBase64;
 	
 	
+
+
 	
-	public byte[] getImagemBase64() {
+
+	public String getImagemBase64() {
 		return imagemBase64;
 	}
 
-	public void setImagemBase64(byte[] imagemBase64) {
+	public void setImagemBase64(String imagemBase64) {
 		this.imagemBase64 = imagemBase64;
 	}
 
