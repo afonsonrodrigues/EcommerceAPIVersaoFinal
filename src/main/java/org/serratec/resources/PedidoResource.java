@@ -77,7 +77,7 @@ public class PedidoResource {
 			Pedido pedido = dto.toPedido(clienteRepository, produtoRepository);
 			pedido.setStatusPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
 			pedidoRepository.save(pedido);
-			return new ResponseEntity<>("Pedido " + pedido.getNumeroPedido() + "Pedido cadastrado com sucesso.",
+			return new ResponseEntity<>(pedido.getNumeroPedido(),
 					HttpStatus.CREATED);
 		} catch (PedidoException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
