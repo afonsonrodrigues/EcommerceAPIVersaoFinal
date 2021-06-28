@@ -134,29 +134,30 @@ public class PedidoResource {
 	}
 
 	@ApiOperation(value = "Finalizando um pedido")
-	@PostMapping("/pedido/finalizar")
-	public ResponseEntity<?> postFinalizar(@Validated @RequestBody PedidoFinalizarDTO dto) {
-		try {
-			Pedido pedido = dto.toPedido(pedidoRepository);
-			pedido.setStatusPedido(StatusPedido.FINALIZADO);
-			pedido.setFormaPagamento(dto.getFormaPagamento());
-			pedidoRepository.save(pedido);
+    @PostMapping("/pedido/finalizar")
+    public ResponseEntity<?> postFinalizar(@Validated @RequestBody PedidoFinalizarDTO dto) {
+        try {
+            Pedido pedido = dto.toPedido(pedidoRepository);
+            pedido.setStatusPedido(StatusPedido.FINALIZADO);
+            pedido.setFormaPagamento(dto.getFormaPagamento());
+            pedidoRepository.save(pedido);
 
-			LocalDate entrega = LocalDate.now().plusDays(7);
+            LocalDate entrega = LocalDate.now().plusDays(7);
 
-			List<ProdutoSimplificadoDTO> itens = new ArrayList<>();
-			itens = pedido.getProdutos().stream().map(obj -> new ProdutoSimplificadoDTO(obj))
-					.collect(Collectors.toList());
+            List<ProdutoSimplificadoDTO> itens = new ArrayList<>();
+            itens = pedido.getProdutos().stream().map(obj -> new ProdutoSimplificadoDTO(obj))
+                    .collect(Collectors.toList());
 
-			Double totalPedido = pedido.getTotalPedido();
-			
-			String corpoEmail = String.format("Data estimada para entrega: %s\nProdutos adquiridos: \n%s\nTotal do pedido: %s", entrega, itens.toString(), totalPedido);
-			
-			emailService.enviar("Atualizaï¿½ï¿½o do status do seu pedido", corpoEmail , pedido.getCliente().getEmail());
-			
-			return new ResponseEntity<>("Data estimada para entrega: " + entrega + "\nProdutos adquiridos: \n" + itens.toString() + "\nTotal do pedido: R$ " + totalPedido, HttpStatus.OK);
-		} catch (PedidoException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-		}
-	}
+            Double totalPedido = pedido.getTotalPedido();
+
+            String corpoEmail = String.format("Data estimada para entrega: %s\nProdutos adquiridos: \n%s\nTotal do pedido: %s", entrega, itens.toString(), totalPedido);
+
+            emailService.enviar("Atualização do status do seu pedido", corpoEmail , pedido.getCliente().getEmail());
+
+//            return new ResponseEntity<>("Data estimada para entrega: " + entrega + "\nProdutos adquiridos: \n" + itens.toString() + "\nTotal do pedido: R$ " + totalPedido, HttpStatus.OK);
+            return new ResponseEntity<>(new PedidoDetalhesDTO(pedido), HttpStatus.OK);
+        } catch (PedidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
